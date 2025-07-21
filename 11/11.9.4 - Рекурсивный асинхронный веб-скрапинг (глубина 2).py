@@ -1,8 +1,6 @@
 import aiohttp
 import asyncio
-from aiohttp.client import ClientResponse
 from bs4 import BeautifulSoup
-import aiofiles
 
 async def scan_url(url, semaphore):
     async with aiohttp.ClientSession() as session:
