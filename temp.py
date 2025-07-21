@@ -1,30 +1,20 @@
 import aiohttp
 import asyncio
+from aiohttp.client import ClientResponse
 
 
 # Колбэк-функции для обработчиков
-async def on_request_start(session, trace_config_ctx, params):
-    print("Запрос начат:", params.url)
-
-async def on_request_end(session, trace_config_ctx, params):
-    print("Запрос завершён:", params.url, params.response.status)
+async def scan_url(url, semaphore):
+    async with aiohttp.ClientSession() as session:
+        async with semaphore:
+            async with session.get(url) as response:
+                return response.status
 
 
 async def main():
-    # Этот класс позволяет настроить обработчики для различных этапов HTTP-запроса
-    trace_config = aiohttp.TraceConfig()
-
-    # Добавляем обработчик для события "начало запроса".
-    # Функция on_request_start() будет вызвана, когда начнется выполнение HTTP-запроса
-    trace_config.on_request_start.append(on_request_start)
-
-    # Добавляем обработчик для события "завершение запроса".
-    # Функция on_request_end() будет вызвана после завершения HTTP-запроса
-    trace_config.on_request_end.append(on_request_end)
-
-    async with aiohttp.ClientSession(trace_configs=[trace_config]) as session:
-        async with session.get('http://www.google.com') as response:
-            print("Статус код:", response.status)
-
+    semaphore = asyncio.Semaphore(10)
+    tasks = [scan_url(fr'https://asyncio.ru/zadachi/5/{i}.html', semaphore) for i in range(1, 1001)]
+    results = await asyncio.gather(*tasks)
+    print(sum(results))
 
 asyncio.run(main())
