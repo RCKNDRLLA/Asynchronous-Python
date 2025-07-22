@@ -18,7 +18,6 @@
 
 import aiohttp
 import asyncio
-from aiohttp.client import ClientResponse
 
 
 # Колбэк-функции для обработчиков
