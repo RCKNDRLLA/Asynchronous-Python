@@ -51,12 +51,10 @@ async def gather_cloth(event):
     while not event.is_set():
         async with condition:    
             await asyncio.sleep(0.1)
-            main.cloth_storage += 6
+            main.cloth_storage += 8
             print(f"Добыто 8 ед. ткани. На складе {main.cloth_storage} ед.")
             condition.notify()
         await asyncio.sleep(0)
-
-
 
 
 async def craft_stone_items(event):
@@ -65,7 +63,7 @@ async def craft_stone_items(event):
             while main.stone_storage < stone_required:
                 await condition.wait()
             main.stone_storage -= stone_required
-            print(f"Изготовлен {item}.")
+            print(f"Изготовлен {item} из камня.")
     event.set()
         
 
@@ -75,7 +73,7 @@ async def craft_metal_items(event):
             while main.metal_storage < metal_required:
                 await condition.wait()
             main.metal_storage -= metal_required
-            print(f"Изготовлен {item}.")
+            print(f"Изготовлен {item} из металла.")
     event.set()
 
 
@@ -85,9 +83,8 @@ async def craft_cloth_items(event):
             while main.cloth_storage < cloth_required:
                 await condition.wait()
             main.cloth_storage -= cloth_required
-            print(f"Изготовлен {item}.")
+            print(f"Изготовлен {item} из ткани.")
     event.set()
-
 
 
 async def main():
