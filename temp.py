@@ -1,5 +1,3 @@
-import threading
-import time
-import inspect
+l = [1, 2, 3]
 
-print(int('9.23'))
+l.belongs()
